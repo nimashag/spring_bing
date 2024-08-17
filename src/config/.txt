@@ -1,0 +1,1 @@
+ado meke thiyenne database connection and environment variables
