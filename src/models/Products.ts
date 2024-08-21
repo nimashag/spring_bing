@@ -26,6 +26,10 @@ const CategorySchema = new mongoose.Schema ({
 
 
 const ProductSchema = new mongoose.Schema ({
+    fileName: {
+        type: String,
+        required: true,
+    },
     productName: {
         type: String,
         required: true,
@@ -50,4 +54,4 @@ const ProductSchema = new mongoose.Schema ({
     timestamps: true,
 });
 
-export const Product = mongoose.model<IProduct & Document>('Product', ProductSchema);
+export const ProductModel = mongoose.model<IProduct & Document>('Product', ProductSchema);

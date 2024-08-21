@@ -1,17 +1,18 @@
 export interface MetaData {
-    color: String,
+    color: string,
     qty: number,
-    size: String,
+    size: string,
 }
 
 export interface Category {
-    sub_cat: String[],
+    sub_cat: string[],
 }
 
 export interface IProduct {
-    productName: String,
+    fileName: string,
+    productName: string,
     metaData: MetaData[],
     unitSalePrice: number,
-    description: String,
+    description: string,
     category: Category,
 }
