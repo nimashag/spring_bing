@@ -1,0 +1,1 @@
+export const JWT_SECRET: any = "qwertyuioplkjhgf1234567898745632"
