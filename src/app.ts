@@ -1,8 +1,12 @@
 import express  from "express";
 import helmet from "helmet";
 import dotenv from "dotenv";
-import cors from 'cors';
-import bodyParser from "body-parser";
+import cors from 'cors'
+import bodyParser from "body-parser"
+import connectDB from "./config/db"
+
+
+// import productRoutes from './routes/product.route';
 
 dotenv.config()
 
@@ -17,7 +21,14 @@ app.get('/', (req, res)=> {
     res.send("Spring Bing backend on notch")
 })
 
-const PORT = process.env.PORT || 3000
+
+// app.use('/product', productRoutes);
+
+connectDB();
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 })
+
+export default app;
