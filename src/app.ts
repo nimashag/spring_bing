@@ -5,8 +5,8 @@ import cors from 'cors'
 import bodyParser from "body-parser"
 import connectDB from "./config/db"
 
-import supplierRoutes from './routes/SupplierRoute';
-import productRoutes from './routes/ProductRoute';
+
+import productRoutes from './routes/product.route';
 
 dotenv.config()
 
@@ -21,7 +21,7 @@ app.get('/', (req, res)=> {
     res.send("Spring Bing backend on notch")
 })
 
-app.use('/supplier', supplierRoutes);
+
 app.use('/product', productRoutes);
 
 connectDB();
