@@ -39,7 +39,7 @@ const ProductSchema = new mongoose.Schema({
         ref: "Category",
         required: true,
     },
-    sub_category: {
+    sub_category: { // there is a issue
         type: [String],
         required: true,
     },

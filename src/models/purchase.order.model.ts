@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
-const purchasedProductsSchema  = new mongoose.Schema({
+const purchasedProductsSchema  = new mongoose.Schema({ //unnecessary
     product_id: {
         type: mongoose.Schema.Types.ObjectId,
+        ref:"Product",
         required: true,
     },
     quantity: {

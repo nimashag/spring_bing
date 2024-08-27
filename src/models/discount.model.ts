@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const discountSchema = new mongoose.Schema({
-    discount_code: {
+    discount_code: { //issue with the discount code
         type: String,
         required: true,
         unique: true,
@@ -14,7 +14,7 @@ const discountSchema = new mongoose.Schema({
         type: Date,
         required: true,
     },
-    applicable_categories: [{
+    applicable_categories: [{ //issue with the category
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category', 
     }],
