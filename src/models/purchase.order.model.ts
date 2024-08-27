@@ -1,46 +1,57 @@
 import mongoose from "mongoose";
+import { IPurchaseOrder } from "../interfaces/IOrder";
 
-const purchasedProductsSchema  = new mongoose.Schema({ //unnecessary
-    product_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref:"Product",
-        required: true,
-    },
-    quantity: {
-        type: Number,
-        required: true,
-        min: 1,
-    },
-    color: {
-        type: String,
-        required: true,
-    },
-    size: {
-        type: String,
-        required: true,
-    },
-})
+const purchasedProductsSchema = new mongoose.Schema({
+  product_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Product",
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
+  color: {
+    type: String,
+    required: true,
+  },
+  size: {
+    type: String,
+    required: true,
+  },
+});
 
 const purchaseOrderSchema = new mongoose.Schema({
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-    },
-    orderProducts: [purchasedProductsSchema],
-    purchase_date: {
-        type: Date,
-        default: Date.now,
-    },
-    billing_address: {
-        type: String,
-        required: true,
-    },
-    order_status: {
-        type: String,
-        enum: ['pre-confirmed', 'confiremd', 'proccessing', 'packing', 'on-delivery', 'delivered']
-    }
-})
+  user_id: {
+    type: String, // just for now. soon we will change this to "user object"
+    required: true,
+  },
+  orderProducts: [purchasedProductsSchema],
+  purchase_date: {
+    type: Date,
+    default: Date.now,
+  },
+  billing_address: {
+    type: String,
+    required: true,
+  },
+  order_status: {
+    type: String,
+    enum: [
+      "pre-confirmed",
+      "confirmed",
+      "processing",
+      "packing",
+      "on-delivery",
+      "delivered",
+    ],
+  },
+});
 
-const PurchaseOrder = mongoose.model('PurchaseOrder', purchaseOrderSchema)
+const PurchaseOrder = mongoose.model<IPurchaseOrder>(
+  "PurchaseOrder",
+  purchaseOrderSchema
+);
 
-export default PurchaseOrder
+export default PurchaseOrder;

@@ -1,6 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from 'mongoose';
+import { IProduct } from '../interfaces/IProduct';
 
-const MetaData = new mongoose.Schema({
+const MetaDataSchema = new mongoose.Schema({
     color: {
         type: String,
         required: true,
@@ -14,7 +15,7 @@ const MetaData = new mongoose.Schema({
         required: true,
         min: 1,
     }
-})
+});
 
 const ProductSchema = new mongoose.Schema({
     name:{
@@ -25,7 +26,7 @@ const ProductSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    metadata: [MetaData],
+    metadata: [MetaDataSchema],
     date: {
         type: [Date],
         default: Date.now,
@@ -39,8 +40,9 @@ const ProductSchema = new mongoose.Schema({
         ref: "Category",
         required: true,
     },
-    sub_category: { // there is a issue
-        type: [String],
+    sub_category: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Subcategory",
         required: true,
     },
     images_path: {
@@ -49,6 +51,4 @@ const ProductSchema = new mongoose.Schema({
     }
 }, { timestamps: true }); 
 
-const Product = mongoose.model('Product', ProductSchema)
-
-export default Product
+export const Product = mongoose.model<IProduct>('Product', ProductSchema);
