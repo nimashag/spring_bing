@@ -17,11 +17,6 @@ const MetaData = new mongoose.Schema({
 })
 
 const ProductSchema = new mongoose.Schema({
-    user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        require: true,
-    },
     name:{
         type: String,
         required: true,
@@ -40,7 +35,8 @@ const ProductSchema = new mongoose.Schema({
         required: true,
     },
     category: {
-        type: [String],
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: "Category",
         required: true,
     },
     sub_category: {
@@ -55,4 +51,4 @@ const ProductSchema = new mongoose.Schema({
 
 const Product = mongoose.model('Product', ProductSchema)
 
-export default Product
+export default Product;
