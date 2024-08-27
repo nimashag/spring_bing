@@ -1,9 +1,15 @@
 import express from 'express';
 import { Category } from '../models/category.model';
+import { validateCategoryRequest } from '../validators/category.validator';
 
 class CategoryController {
 
     createCategory = async (request: express.Request, response: express.Response) => {
+
+        const validation = validateCategoryRequest(request);
+        if(validation.statusCode !== 200) {
+            return response.status(validation.statusCode).json({ error: validation.errorMessage });
+        }
         try {
             const { name, description } = request.body;
 

@@ -6,7 +6,9 @@ import bodyParser from "body-parser"
 import connectDB from "./config/db"
 
 
-// import productRoutes from './routes/product.route';
+import productRoutes from './routes/product.route';
+import categoryRoutes from './routes/category.route';
+import subCategoryRoutes from './routes/sub.category.route';
 
 dotenv.config()
 
@@ -22,7 +24,9 @@ app.get('/', (req, res)=> {
 })
 
 
-// app.use('/product', productRoutes);
+app.use('/product', productRoutes);
+app.use('/category', categoryRoutes);
+app.use('/subCategory', subCategoryRoutes);
 
 connectDB();
 
