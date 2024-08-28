@@ -8,13 +8,9 @@ const subcategorySchema: Schema = new Schema({
         unique: true 
     },
 
-    category_id: { 
-        type: Schema.Types.ObjectId, 
-        ref: 'Category', 
-        required: true 
+    description: {
+        type: String
     },
-
-    description: String,
     
 }, { timestamps: true });
 

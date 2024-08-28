@@ -5,15 +5,14 @@ class SubcategoryController {
 
     createSubcategory = async (request: express.Request, response: express.Response) => {
         try {
-            const { name, category_id, description } = request.body;
+            const { name, description } = request.body;
 
-            if (!name || !category_id) {
-                return response.status(400).json({ message: "Name and category ID are required" });
+            if (!name) {
+                return response.status(400).json({ message: "Name is required" });
             }
 
             const subcategory = new Subcategory({
                 name,
-                category_id,
                 description,
             });
 
@@ -26,7 +25,7 @@ class SubcategoryController {
 
     getAllSubcategories = async (request: express.Request, response: express.Response) => {
         try {
-            const subcategories = await Subcategory.find().populate('category_id', 'name');
+            const subcategories = await Subcategory.find();
             return response.status(200).json({ data: subcategories });
         } catch (error) {
             return response.status(500).json({ message: "Failed to retrieve subcategories", error });
