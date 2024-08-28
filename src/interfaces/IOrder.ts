@@ -1,18 +1,19 @@
-import { Document } from "mongoose";
+import { Document,ObjectId } from "mongoose";
 import { IProduct } from "./IProduct";
 
 interface IPurchaseProducts {
-  product_id: IProduct;
-  quantity: Number;
-  color: String;
-  size: String;
+  product_id: ObjectId;
+  quantity: number;
+  color: string;
+  size: string;
 }
 
 export interface IPurchaseOrder extends Document {
-  user_id: String; // just for now. soon we will change this to "user object"
+  user_id: string; // just for now. soon we will change this to "user object"
   orderProducts: IPurchaseProducts[];
   purchase_date: Date;
-  billing_address: String;
+  billing_address: string;
+  total_price: number;
   order_status:
     | "pre-confirmed"
     | "confirmed"

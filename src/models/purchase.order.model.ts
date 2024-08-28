@@ -36,6 +36,10 @@ const purchaseOrderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  total_price : {
+    type: Number,
+    required: true,
+  },
   order_status: {
     type: String,
     enum: [

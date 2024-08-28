@@ -8,17 +8,21 @@ class ProductController {
             const products = await Product.find();
             return response.status(200).json({data: products})
         } catch (error) {
-            return response.sendStatus(400);
+            return response.status(500).json({ message: "Failed to retrieve products", error });
         }
     }
 
     getProduct = async (request: express.Request, response: express.Response) => {
-        try{
-            const {id} = request.params;
+        try {
+            const { id } = request.params;
             const product = await Product.findById(id);
-            return response.status(200).json({data: product})
+            if (product) {
+                return response.status(200).json({ data: product });
+            } else {
+                return response.status(404).json({ message: "Product not found" });
+            }
         } catch (error) {
-            return response.sendStatus(400);
+            return response.status(500).json({ message: "Failed to retrieve product", error });
         }
     }
 
@@ -35,19 +39,23 @@ class ProductController {
                 images_path,
             });
             await product.save();
-            return response.status(201).json({message: "Product Created", data: product})
+            return response.status(201).json({message: "Product Created", data: product});
         } catch (error) {
-            return response.sendStatus(400);
+            return response.status(500).json({ message: "Failed to create product", error });
         }
     }
 
     updateProduct = async (request: express.Request, response: express.Response) => {
-        try{
-            const {id} = request.params;
-            const {name, unit_price, metadata, description, category, sub_category, images_path } = request.body;
+        try {
+            const { id } = request.params;
+            const { name, unit_price, metadata, description, category, sub_category, images_path } = request.body;
+
+            if (!name || !unit_price || !metadata || !description || !category || !sub_category || !images_path) {
+                return response.status(400).json({ message: "All fields are required" });
+            }
 
             const product = await Product.findById(id);
-            if(product){
+            if (product) {
                 product.name = name;
                 product.unit_price = unit_price;
                 product.metadata = metadata;
@@ -57,21 +65,27 @@ class ProductController {
                 product.images_path = images_path;
 
                 await product.save();
-                return response.status(200).json({message: "Product updated", data: product})
+                return response.status(200).json({ message: "Product updated", data: product });
+            } else {
+                return response.status(404).json({ message: "Product not found" });
             }
-            return response.sendStatus(400);
         } catch (error) {
-            return response.sendStatus(400);
+            return response.status(500).json({ message: "Failed to update product", error });
         }
     }
 
     deleteProduct = async (request: express.Request, response: express.Response) => {
-        try{
-            const {id} = request.params;
-            await Product.findByIdAndDelete({_id: id});
-            return response.status(200).json({message: "Product Deleted"})
+        try {
+            const { id } = request.params;
+            const product = await Product.findByIdAndDelete(id);
+
+            if (product) {
+                return response.status(200).json({ message: "Product Deleted" });
+            } else {
+                return response.status(404).json({ message: "Product not found" });
+            }
         } catch (error) {
-            return response.sendStatus(400);
+            return response.status(500).json({ message: "Failed to delete product", error });
         }
     }
 

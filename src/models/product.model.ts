@@ -28,7 +28,7 @@ const ProductSchema = new mongoose.Schema({
     },
     metadata: [MetaDataSchema],
     date: {
-        type: [Date],
+        type: Date,
         default: Date.now,
     },
     description: {
