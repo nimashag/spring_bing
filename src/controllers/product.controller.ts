@@ -1,5 +1,6 @@
-import express, { request } from 'express';
+import express, { Request, Response } from 'express';
 import { Product } from '../models/product.model';
+import { validateProductRequest } from '../validators/product.validator';
 
 class ProductController {
 
@@ -27,6 +28,11 @@ class ProductController {
     }
 
     createProduct = async (request: express.Request, response: express.Response) => {
+
+        const validationError = validateProductRequest(request, response);
+        if (validationError) return; // Stop execution if validation fails
+
+
         try{
             const {name, unit_price, metadata, description, category, sub_category, images_path } = request.body;
             const product = new Product({
@@ -46,6 +52,10 @@ class ProductController {
     }
 
     updateProduct = async (request: express.Request, response: express.Response) => {
+
+        const validationError = validateProductRequest(request, response);
+        if (validationError) return; // Stop execution if validation fails
+
         try {
             const { id } = request.params;
             const { name, unit_price, metadata, description, category, sub_category, images_path } = request.body;
