@@ -93,9 +93,9 @@ export const getAllOrder = async (req: express.Request, res: express.Response) =
 export const getOneOrder = async (req: express.Request, res: express.Response) => {
     try {
 
-        const userId = req.params.id;
+        const id = req.params.id;
 
-        const order = await PurchaseOrderModel.findOne({user_id: userId}).populate({
+        const order = await PurchaseOrderModel.findById(id).populate({
             path: 'orderProducts.product_id',
             model: 'Product', 
           });
