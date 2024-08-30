@@ -8,6 +8,7 @@ import productRoutes from "./routes/product.route";
 import orderRoute from "./routes/order.route";
 import categoryRoutes from './routes/category.route';
 import subCategoryRoutes from './routes/sub.category.route';
+import faqRoutes from './routes/faq.route';
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ app.use("/order", orderRoute);
 app.use('/product', productRoutes);
 app.use('/category', categoryRoutes);
 app.use('/subCategory', subCategoryRoutes);
+
+app.use('/faqs', faqRoutes);
 
 connectDB();
 
