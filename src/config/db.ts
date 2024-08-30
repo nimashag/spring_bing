@@ -4,8 +4,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const url: string | undefined = process.env.URL;
-
-
 if (!url) {
     throw new Error("The MongoDB URI environment variable is not set.");
 }

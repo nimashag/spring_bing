@@ -92,8 +92,6 @@ export const getAllOrder = async (req: express.Request, res: express.Response) =
 
 export const getOneOrder = async (req: express.Request, res: express.Response) => {
     try {
-        
-        /* should check the findOne() method */
 
         const id = req.params.id;
 
@@ -141,6 +139,28 @@ export const getOneOrder = async (req: express.Request, res: express.Response) =
         }
     }
 };
+
+export const getPendingOrder = async (req: express.Request, res: express.Response) => {
+    try {
+        
+        const userId = req.params.id;
+
+        const pendingOrders = await PurchaseOrderModel.find({ user_id: userId, order_status: "processing"});
+
+        if(!pendingOrders) {
+            return res.status(404).send({message: "No Pending Orders Found for this user"});
+        }
+
+        return res.status(200).send(pendingOrders);
+
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).send({ message: error.message });
+        } else {
+            res.status(500).send({ message: 'An unknown error occurred' });
+        }
+    }
+}
 
 export const updateOrder = async (req: express.Request, res: express.Response) => {
     try {

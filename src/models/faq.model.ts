@@ -10,7 +10,7 @@ const FAQSchema = new mongoose.Schema({
         required: true,  // The question being asked
     },
     answer: {
-        type: String,
+        type: String, 
         required: false,  // The answer to the question - optional as becasue adding information from dashboard
     },
     answered_by: {

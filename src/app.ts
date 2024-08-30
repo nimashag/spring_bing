@@ -9,6 +9,7 @@ import orderRoute from "./routes/order.route";
 import categoryRoutes from './routes/category.route';
 import subCategoryRoutes from './routes/sub.category.route';
 import faqRoutes from './routes/faq.route';
+import CartRoutes from './routes/cart.route';
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ app.use("/order", orderRoute);
 app.use('/product', productRoutes);
 app.use('/category', categoryRoutes);
 app.use('/subCategory', subCategoryRoutes);
+app.use('/cart', CartRoutes);
 
 app.use('/faqs', faqRoutes);
 
