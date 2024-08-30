@@ -3,7 +3,7 @@ import Cart from '../models/cart.model';
 
 export const addCartItem = async (req: express.Request, res: express.Response) => {
     try {
-        const {user_id, added_products} = req.body;
+        const {user_id, added_products, color} = req.body;
 
         if (!Array.isArray(added_products) || added_products.some(item => !item.product_id || !item.quantity)) {
             return res.status(400).send({ message: "Invalid cart data" });
@@ -48,31 +48,6 @@ export const getAllCartItems = async (req: express.Request, res: express.Respons
         }
     }
 }
-
-/* export const getCartItem = async (req: express.Request, res: express.Response) => {
-    try {
-        
-        const id = req.params.id;
-
-        const cartItem = await Cart.findById(id).populate({
-            path: 'added_products.product_id',
-            model: 'Product',  
-        });
-
-        if(!cartItem) {
-            return res.status(404).send({message: "Cart Item not found"});
-        }
-
-        return res.status(200).send(cartItem);
-
-    } catch (error: unknown) {
-        if (error instanceof Error) {
-            res.status(500).send({ message: error.message });
-        } else {
-            res.status(500).send({ message: 'An unknown error occurred' });
-        }
-    }
-} */
 
 export const updateCartItem = async (req: express.Request, res: express.Response) => {
     try {
@@ -126,3 +101,17 @@ export const deleteCart = async (req: express.Request, res: express.Response) =>
         }
     }
 }
+
+export const deleteFromCart = async (req: express.Request, res: express.Response) => {
+    try {
+        
+        
+
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).send({ message: error.message });
+        } else {
+            res.status(500).send({ message: 'An unknown error occurred' });
+        }     
+    }
+};

@@ -5,7 +5,6 @@ import {IPurchaseOrder} from '../interfaces/IOrder';
 
 export const createOrder = async (req: express.Request, res: express.Response) => {
 
-
     try {
         const { user_id, orderProducts, billing_address, order_status } = req.body;
 
@@ -166,22 +165,43 @@ export const updateOrder = async (req: express.Request, res: express.Response) =
     try {
         
         const id = req.params.id;
+        let total_price = 0;
 
         const order = await PurchaseOrderModel.findById(id);
 
-        if(!order) {
-            return res.status(404).send({message: "Order not found"});
+        if (!order) {
+            return res.status(404).send({ message: "Order not found" });
         }
-        else {
-            order.user_id = req.body.user_id,
-            order.orderProducts = req.body.orderProducts,
-            order.purchase_date  = req.body.purchase_date,
-            order.billing_address = req.body.billing_address,
-            order.order_status = req.body.order_status 
 
-            await order.save();
-            return res.status(200).json({message: "order successfully updated", data: order})
+        // Update order details
+        order.user_id = req.body.user_id;
+        order.orderProducts = req.body.orderProducts;
+        order.purchase_date = req.body.purchase_date;
+        order.billing_address = req.body.billing_address;
+        order.order_status = req.body.order_status;
+
+        // Calculate total price based on orderProducts
+        for (const orderProduct of req.body.orderProducts) {
+            const { product_id, quantity } = orderProduct;
+
+            const product = await Product.findById(product_id);
+            if (!product) {
+                return res.status(404).json({ message: `Product with ID ${product_id} not found` });
+            }
+
+            // Corrected price calculation
+            total_price += product.unit_price * quantity;
         }
+
+        // Update the total price in the order
+        order.total_price = total_price;
+
+        // Save the updated order
+        await order.save();
+
+        return res.status(200).json({ message: "Order successfully updated", data: order });
+        
+
 
     } catch (error: unknown) {
         if (error instanceof Error) {
