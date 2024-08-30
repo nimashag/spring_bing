@@ -19,8 +19,7 @@ const AddedProductSchema = new mongoose.Schema({
 
 const CartSchema = new mongoose.Schema({
     user_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
+        type: String, //just for now
         required: true,
     },
     added_products: [AddedProductSchema], 
