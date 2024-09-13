@@ -1,13 +1,14 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import { IProductReview } from '../interfaces/IReview';
 
 const ProductReviewSchema = new mongoose.Schema({
     user_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        require: true,
+        ref: 'User', 
+        required: true,
     },
-    title:{
-        enum: ['complains', 'reviews'],
+    title: {
+        type: String,
         required: true,
     },
     description: {
@@ -19,19 +20,26 @@ const ProductReviewSchema = new mongoose.Schema({
         default: Date.now,
     },
     rating: {
-        enum: [1,2,3,4,5],
+        type: Number,
+        enum: [1, 2, 3, 4, 5],
         required: true,
     },
     status: {
+        type: String,
         default: 'pending',
-        enum: ['pending', 'solved', 'onprogress']
+        enum: ['pending', 'solved', 'onprogress'],
     },
     images_path: {
         type: [String],
-        required: true,
+        required: false, // Adjust as needed
     }
-}, { timestamps: true }); 
+}, { timestamps: true });
 
-const ProductReview = mongoose.model('ProductReview', ProductReviewSchema)
+//Adding indexes 
+ProductReviewSchema.index({ date: 1 });     
+ProductReviewSchema.index({ rating: 1 });  
+ProductReviewSchema.index({ status: 1 });   
 
-export default ProductReview
+const ProductReview = mongoose.model<IProductReview>('ProductReview', ProductReviewSchema);
+
+export default ProductReview;
