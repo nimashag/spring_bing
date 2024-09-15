@@ -3,17 +3,19 @@ import Cart from '../models/cart.model';
 
 export const addCartItem = async (req: express.Request, res: express.Response) => {
     try {
-        const {user_id, added_products, color} = req.body;
+        const {user_id, added_products} = req.body;
 
-        if (!Array.isArray(added_products) || added_products.some(item => !item.product_id || !item.quantity)) {
-            return res.status(400).send({ message: "Invalid cart data" });
+        const result = await Cart.findOne({user_id: user_id});
+
+        if(result) {
+            return res.status(201).send("User Already in Cart");
         }
 
-        const newOrder = new Cart({user_id, added_products});
+        const newCart = new Cart({user_id, added_products});
+        await newCart.save();
 
-        await newOrder.save();
+        return res.status(201).send({message: "Cart item added successfully", newCart});
 
-        res.status(201).send({message: "Cart item added successfully", newOrder});
 
     } catch (error: unknown) {
         if (error instanceof Error) {
@@ -66,7 +68,7 @@ export const updateCartItem = async (req: express.Request, res: express.Response
             return res.status(404).send({message: "cart can not be found"});
         }
 
-        return res.status(200).send(updatedCart);
+        return res.status(200).send({message: "Cart item added successfully", updatedCart});
 
     } catch (error: unknown) {
         if (error instanceof Error) {
@@ -105,6 +107,15 @@ export const deleteCart = async (req: express.Request, res: express.Response) =>
 export const deleteFromCart = async (req: express.Request, res: express.Response) => {
     try {
         
+        const userId = req.params.id;
+
+        const result = await Cart.findOneAndDelete({user_id : userId});
+
+        if(!result) {
+            return res.status(404).send({ message: 'Cart is not found' });
+        } 
+
+        return res.status(200).send({ message: 'Cart Delete Successful' });
         
 
     } catch (error) {
