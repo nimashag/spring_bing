@@ -10,6 +10,8 @@ import categoryRoutes from './routes/category.route';
 import subCategoryRoutes from './routes/sub.category.route';
 import faqRoutes from './routes/faq.route';
 import CartRoutes from './routes/cart.route';
+import productReviewRoutes from "./routes/review.route";
+
 
 dotenv.config();
 
@@ -37,6 +39,7 @@ app.use('/subCategory', subCategoryRoutes);
 app.use('/cart', CartRoutes);
 
 app.use('/faqs', faqRoutes);
+app.use('/reviews', productReviewRoutes);
 
 connectDB();
 
