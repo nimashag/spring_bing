@@ -1,7 +1,55 @@
-import express from 'express';
+import express, { response } from 'express';
 import PurchaseOrderModel from '../models/purchase.order.model';
 import {Product} from "../models/product.model";    
 import {IPurchaseOrder} from '../interfaces/IOrder';
+
+
+export const updateAllWithTotal = async(req: express.Request, res: express.Response) => {
+    try {
+        
+        const orders = await PurchaseOrderModel.find().populate({
+            path: 'orderProducts.product_id',
+            model: 'Product', 
+          });
+
+        if (orders.length === 0) {
+            return res.status(404).send({message: "No Orders Found"});
+        }
+
+        const updatedOrders = orders.map(async (order) => {
+
+            let total_price = 0;
+
+            for (const orderProduct of order.orderProducts){
+
+                const { product_id, quantity } = orderProduct;
+
+                const product = await Product.findById(product_id);
+
+                if (!product || !product.unit_price) {
+                    return res.status(404).json({ message: `Product with ID ${product_id} not found` });
+                }
+
+                total_price += product.unit_price * quantity;
+            }
+
+            order.total_price = total_price;
+            await order.save();
+
+        });
+
+        await Promise.all(updatedOrders);
+
+        res.status(200).send({ message: "Updated successfully" });
+
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(500).send({ message: error.message });
+        } else {
+            res.status(500).send({ message: 'An unknown error occurred' });
+        }
+    }
+}
 
 export const createOrder = async (req: express.Request, res: express.Response) => {
 
@@ -43,8 +91,8 @@ export const createOrder = async (req: express.Request, res: express.Response) =
             
             /* metaDataItem.quantity -= quantity; */
             total_price += product.unit_price * quantity;
-            console.log(typeof(product.unit_price));
-            console.log(typeof(quantity));
+            //console.log(typeof(product.unit_price));
+            //console.log(typeof(quantity));
             console.log(total_price);
 
             await product.save();
@@ -135,6 +183,40 @@ export const getOneOrder = async (req: express.Request, res: express.Response) =
         } else {
             res.status(500).send({ message: 'An unknown error occurred' });
 
+        }
+    }
+};
+
+export const getOrdersOnYear = async (req: express.Request, res: express.Response) => {
+    try {
+
+        const year = parseInt(req.query.year as string);
+        console.log(year);
+        const orders = await PurchaseOrderModel.find().populate({
+            path: 'orderProducts.product_id',
+            model: 'Product', 
+          });
+
+        if (orders.length < 0) {
+            return res.status(404).send({message: "No Orders Found"});
+        }
+
+        const filteredOrders = orders.filter((order) => {
+            const orderYear = new Date(order.purchase_date).getFullYear();
+            console.log(orderYear);
+            console.log(typeof(orderYear));
+            return orderYear == year;
+        })
+
+        console.log(filteredOrders.length);
+
+        res.status(200).send(filteredOrders);
+
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).send({ message: error.message });
+        } else {
+            res.status(500).send({ message: 'An unknown error occurred' });
         }
     }
 };
