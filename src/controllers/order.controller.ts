@@ -90,6 +90,7 @@ export const createOrder = async (req: express.Request, res: express.Response) =
 
             
             /* metaDataItem.quantity -= quantity; */
+            metaDataItem.quantity -= quantity;
             total_price += product.unit_price * quantity;
             //console.log(typeof(product.unit_price));
             //console.log(typeof(quantity));
