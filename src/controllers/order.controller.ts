@@ -137,6 +137,29 @@ export const getAllOrder = async (req: express.Request, res: express.Response) =
     }   
 };
 
+
+//this one is the pagination api method
+export const getOrdersByPage = async (req: express.Request, res: express.Response) => {
+    const page: number = parseInt(req.query.page as string ?? '0') || 0;
+    const limit: number = parseInt(req.query.limit as string ?? '10') || 10;
+
+  try {
+    const orders = await PurchaseOrderModel.find()
+      .skip(page * limit)
+      .limit(limit);
+    const totalOrders = await PurchaseOrderModel.countDocuments();
+
+    res.json({
+      orders,
+      totalPages: Math.ceil(totalOrders / limit),
+      currentPage: page
+    });
+  } catch (error) {
+    res.status(500).send(error);
+  }
+};
+
+
 export const getOneOrder = async (req: express.Request, res: express.Response) => {
     try {
 
@@ -243,6 +266,28 @@ export const getPendingOrder = async (req: express.Request, res: express.Respons
     }
 }
 
+export const getConfirmedOrder = async (req: express.Request, res: express.Response) => {
+    try {
+        
+        const userId = req.params.id;
+
+        const confirmedOrders = await PurchaseOrderModel.find({ user_id: userId, order_status: "confirmed"});
+
+        if(!confirmedOrders) {
+            return res.status(404).send({message: "No Pending Orders Found for this user"});
+        }
+
+        return res.status(200).send(confirmedOrders);
+
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).send({ message: error.message });
+        } else {
+            res.status(500).send({ message: 'An unknown error occurred' });
+        }
+    }
+}
+
 export const updateOrder = async (req: express.Request, res: express.Response) => {
     try {
         
@@ -269,6 +314,33 @@ export const updateOrder = async (req: express.Request, res: express.Response) =
         }
     }
 };
+
+export const confirmOrder = async (req: express.Request, res: express.Response) => {
+    try {
+
+        const {id} = req.params;
+
+        const order = await PurchaseOrderModel.findById(id);
+        console.log(order);
+        if(!order) {
+            return res.status(404).send({message: "Order not found"});
+        }
+        else {
+            order.order_status = "confirmed";
+
+            await order.save();
+            return res.status(200).json({ message: "Product updated", data: order });
+        }
+
+    }
+    catch (error: unknown) {
+        if (error instanceof Error) {
+            res.status(500).send({ message: error.message });
+        } else {
+            res.status(500).send({ message: 'An unknown error occurred' });
+        }
+    }
+}
 
 export const deleteOrder = async (req: express.Request, res: express.Response) => {
     try {
