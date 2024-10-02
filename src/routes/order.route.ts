@@ -10,7 +10,8 @@ import {
   updateAllWithTotal,
   getConfirmedOrder,
   confirmOrder,
-  getOrdersByPage
+  getOrdersByPage,
+  updateOrderStatus,
 } from "../controllers/order.controller";
 
 const router = express.Router();
@@ -23,8 +24,8 @@ router.get("/get-orders-on-year", getOrdersOnYear);
 router.put("/updateOrder/:id", updateOrder);
 router.put("/updateAllOrders", updateAllWithTotal);
 router.put("/confirmOrder/:id", confirmOrder);
+router.put("/updateOrderStatus/:id", updateOrderStatus);
 router.delete("/deleteOrder/:id", deleteOrder);
 router.get("/get-confirmed-order/:id", getConfirmedOrder);
-
 
 export default router;
