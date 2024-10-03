@@ -17,7 +17,8 @@ import {
 const router = express.Router();
 
 router.post("/create-order", createOrder);
-router.get("/getAllOrders", getOrdersByPage);
+router.get("/getOrdersByPage", getOrdersByPage);
+router.get("/getAllOrders", getAllOrder);
 router.get("/getOneOrder/:id", getOneOrder);
 router.get("/get-pending-order/:id", getPendingOrder);
 router.get("/get-orders-on-year", getOrdersOnYear);
