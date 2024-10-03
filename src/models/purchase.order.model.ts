@@ -36,7 +36,7 @@ const purchaseOrderSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  total_price : {
+  total_price: {
     type: Number,
     required: true,
   },

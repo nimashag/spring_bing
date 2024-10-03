@@ -6,15 +6,13 @@ import bodyParser from "body-parser";
 import connectDB from "./config/db";
 import productRoutes from "./routes/product.route";
 import orderRoute from "./routes/order.route";
-import categoryRoutes from './routes/category.route';
-import subCategoryRoutes from './routes/sub.category.route';
-import faqRoutes from './routes/faq.route';
-import CartRoutes from './routes/cart.route';
+import categoryRoutes from "./routes/category.route";
+import subCategoryRoutes from "./routes/sub.category.route";
+import faqRoutes from "./routes/faq.route";
+import CartRoutes from "./routes/cart.route";
 import productReviewRoutes from "./routes/review.route";
 
-
 dotenv.config();
-
 
 const app = express();
 
@@ -27,19 +25,18 @@ app.get("/", (req, res) => {
   res.send("Spring Bing backend on notch");
 });
 
-
-app.get('/', (req, res)=> {
-    res.send("Spring Bing backend on notch")
-})
+app.get("/", (req, res) => {
+  res.send("Spring Bing backend on notch");
+});
 
 app.use("/order", orderRoute);
-app.use('/product', productRoutes);
-app.use('/category', categoryRoutes);
-app.use('/subCategory', subCategoryRoutes);
-app.use('/cart', CartRoutes);
+app.use("/product", productRoutes);
+app.use("/category", categoryRoutes);
+app.use("/subCategory", subCategoryRoutes);
+app.use("/cart", CartRoutes);
 
-app.use('/faqs', faqRoutes);
-app.use('/reviews', productReviewRoutes);
+app.use("/faqs", faqRoutes);
+app.use("/reviews", productReviewRoutes);
 
 connectDB();
 
