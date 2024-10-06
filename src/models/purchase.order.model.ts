@@ -24,7 +24,8 @@ const purchasedProductsSchema = new mongoose.Schema({
 
 const purchaseOrderSchema = new mongoose.Schema({
   user_id: {
-    type: String, // just for now. soon we will change this to "user object"
+    type: [mongoose.Schema.Types.ObjectId], 
+    ref:"User",
     required: true,
   },
   orderProducts: [purchasedProductsSchema],
