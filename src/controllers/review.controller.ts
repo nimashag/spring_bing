@@ -8,35 +8,39 @@ class ProductReviewController {
     public async createReview(req: Request, res: Response): Promise<Response> {
         try {
             const { user_id, title, description, rating, images_path } = req.body;
-
+    
             // Required fields
-            if (!user_id || !title || !description || !rating) {
+            if (!title || !description || !rating) {
                 return res.status(400).json({ message: 'Missing required fields' });
             }
-
-            // Validate user_id exists in the User model
-            const userExists = await User.findById(user_id);
-            if (!userExists) {
-                return res.status(400).json({ message: 'User not found' });
+    
+            // Validate user_id only if provided
+            let userExists = null;
+            if (user_id) {
+                userExists = await User.findById(user_id);
+                if (!userExists) {
+                    return res.status(400).json({ message: 'User not found' });
+                }
             }
-
+    
             const newReview: IProductReview = new ProductReview({
-                user_id,
+                user_id: userExists ? user_id : undefined,  // Assign only if user exists
                 title,
                 description,
                 rating,
                 images_path,
-                status: 'pending' 
+                status: 'pending',  // Default status
             });
-
+    
             await newReview.save();
-
+    
             return res.status(201).json(newReview);
         } catch (error) {
             console.error('Error creating review:', error);
             return res.status(500).json({ message: 'Error creating review', error });
         }
     }
+    
 
     // Get all reviews with user details populated
     public async getAllReviews(req: Request, res: Response): Promise<Response> {
